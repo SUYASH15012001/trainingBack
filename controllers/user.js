@@ -53,3 +53,44 @@ export const signin = async (req, res) => {
     console.log(err);
   }
 };
+
+export const googleLogIn = async (req, res) => {
+  try {
+    // console.log(req);
+    // return res.send(200).json({ result: "", token: "" });
+    const { credential } = req.body;
+
+    const user = jwt.decode(credential);
+    const { email, name } = user;
+
+    const oldUser = await UserModel.findOne({ email });
+    if (oldUser) {
+      const result = {
+        _id: oldUser._id.toString(),
+        email,
+        name,
+      };
+      const token = jwt.sign(
+        { email: oldUser.email, id: oldUser._id },
+        secret,
+        {
+          expiresIn: "1h",
+        }
+      );
+      return res.status(200).json({ result, token });
+    }
+    const result = await UserModel.create({
+      email,
+      name,
+      googleId: email,
+    });
+
+    const token = jwt.sign({ email: result.email, id: result._id }, secret, {
+      expiresIn: "1h",
+    });
+    return res.status(200).json({ result, token });
+  } catch (err) {
+    res.status(500).json({ message: "Something wrong happened" });
+    console.log(err);
+  }
+};

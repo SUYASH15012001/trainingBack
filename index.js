@@ -7,6 +7,7 @@ import morgan from "morgan";
 
 // Routes
 import userRoutes from "./routes/user.js";
+import tourRoutes from "./routes/tour.js";
 
 // APP initialising
 const app = express();
@@ -32,6 +33,7 @@ mongoose
   .catch((err) => console.log(err, "\n err in connection"));
 
 app.use("/user", userRoutes);
+app.use("/tour", tourRoutes);
 
 // app.get("/", (req, res) => {
 //   res.send("Hello World");
