@@ -22,9 +22,7 @@ export const signup = async (req, res) => {
       name: `${firstName} ${lastName}`,
     });
 
-    const token = jwt.sign({ email: result.email, id: result._id }, secret, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign({ email: result.email, id: result._id }, secret);
     res.status(200).json({ result, token });
   } catch (err) {
     res.status(500).json({ message: "Something wrong happened" });
@@ -44,9 +42,7 @@ export const signin = async (req, res) => {
     if (!isPasswordCorrect) {
       return res.status(403).json({ message: "Incorrect Password" });
     }
-    const token = jwt.sign({ email: oldUser.email, id: oldUser._id }, secret, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign({ email: oldUser.email, id: oldUser._id }, secret);
     res.status(200).json({ result: oldUser, token });
   } catch (err) {
     res.status(500).json({ message: "Something wrong happened" });
@@ -85,9 +81,7 @@ export const googleLogIn = async (req, res) => {
       googleId: email,
     });
 
-    const token = jwt.sign({ email: result.email, id: result._id }, secret, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign({ email: result.email, id: result._id }, secret);
     return res.status(200).json({ result, token });
   } catch (err) {
     res.status(500).json({ message: "Something wrong happened" });
